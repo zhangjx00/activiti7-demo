@@ -1,6 +1,5 @@
 package com.activiti7.controller;
 
-
 import com.activiti7.mapper.ActivitiMapper;
 import com.activiti7.util.AjaxResponse;
 import com.activiti7.util.GlobalConfig;
@@ -25,14 +24,10 @@ public class UserController {
         try {
             List<HashMap<String, Object>> userList = mapper.selectUser();
 
-
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
-                    GlobalConfig.ResponseCode.SUCCESS.getDesc(), userList);
-
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(), GlobalConfig.ResponseCode.SUCCESS.getDesc(), userList);
 
         } catch (Exception e) {
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
-                    "获取用户列表失败", e.toString());
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(), "获取用户列表失败", e.toString());
         }
     }
 

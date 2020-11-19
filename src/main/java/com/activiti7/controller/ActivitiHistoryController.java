@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
+/**
+ * 历史数据查询
+ */
 @RestController
 @RequestMapping("/activitiHistory")
 public class ActivitiHistoryController {
@@ -34,7 +37,11 @@ public class ActivitiHistoryController {
     @Autowired
     private HistoryService historyService;
 
-    //用户历史
+    /**
+     * 根据用户名字查询历史任务
+     *
+     * @return
+     */
     @GetMapping(value = "/getInstancesByUserName")
     public AjaxResponse InstancesByUser() {
         try {
@@ -44,46 +51,58 @@ public class ActivitiHistoryController {
                     .taskAssignee("bajie")
                     .list();
 
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
-                    GlobalConfig.ResponseCode.SUCCESS.getDesc(), historicTaskInstances);
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(), GlobalConfig.ResponseCode.SUCCESS.getDesc(), historicTaskInstances);
         } catch (Exception e) {
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
-                    "获取历史任务失败", e.toString());
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(), "获取历史任务失败", e.toString());
         }
 
     }
 
-    //任务实例历史
+
+    /**
+     * 根据流程实例ID查询任务实例历史
+     *
+     * @param piID 流程实例ID
+     * @return
+     */
     @GetMapping(value = "/getInstancesByPiID")
     public AjaxResponse getInstancesByPiID(@RequestParam("piID") String piID) {
         try {
 
-            //--------------------------------------------另一种写法-------------------------
             List<HistoricTaskInstance> historicTaskInstances = historyService.createHistoricTaskInstanceQuery()
                     .orderByHistoricTaskInstanceEndTime().asc()
                     .processInstanceId(piID)
                     .list();
 
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
-                    GlobalConfig.ResponseCode.SUCCESS.getDesc(), historicTaskInstances);
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(), GlobalConfig.ResponseCode.SUCCESS.getDesc(), historicTaskInstances);
         } catch (Exception e) {
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
-                    "获取历史任务失败", e.toString());
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(), "获取历史任务失败", e.toString());
         }
 
     }
 
 
-    //流程图高亮
+    /**
+     * 流程图高亮
+     *
+     * @param instanceId
+     * @param UuserInfoBean
+     * @return
+     */
     @GetMapping("/gethighLine")
     public AjaxResponse gethighLine(@RequestParam("instanceId") String instanceId, @AuthenticationPrincipal UserInfoBean UuserInfoBean) {
         try {
-            HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
-                    .processInstanceId(instanceId).singleResult();
+            HistoricProcessInstance historicProcessInstance = historyService
+                    .createHistoricProcessInstanceQuery()
+                    .processInstanceId(instanceId)
+                    .singleResult();
+
             //获取bpmnModel对象
             BpmnModel bpmnModel = repositoryService.getBpmnModel(historicProcessInstance.getProcessDefinitionId());
+
             //因为我们这里只定义了一个Process 所以获取集合中的第一个即可
             Process process = bpmnModel.getProcesses().get(0);
+
             //获取所有的FlowElement信息
             Collection<FlowElement> flowElements = process.getFlowElements();
 
@@ -115,12 +134,12 @@ public class ActivitiHistoryController {
             Set<String> highLine = new HashSet<>();
             keyList.forEach(s -> highLine.add(map.get(s)));
 
-
             //获取流程实例 历史节点（已完成）
             List<HistoricActivityInstance> listFinished = historyService.createHistoricActivityInstanceQuery()
                     .processInstanceId(instanceId)
                     .finished()
                     .list();
+
             //高亮节点ID
             Set<String> highPoint = new HashSet<>();
             listFinished.forEach(s -> highPoint.add(s.getActivityId()));
@@ -157,9 +176,7 @@ public class ActivitiHistoryController {
                     }
                 }
             });
-
             highLine.removeAll(set);
-
 
             //获取当前用户
             //User sysUser = getSysUser();
@@ -176,7 +193,8 @@ public class ActivitiHistoryController {
             List<HistoricTaskInstance> taskInstanceList = historyService.createHistoricTaskInstanceQuery()
                     .taskAssignee(AssigneeName)
                     .finished()
-                    .processInstanceId(instanceId).list();
+                    .processInstanceId(instanceId)
+                    .list();
 
             taskInstanceList.forEach(a -> iDo.add(a.getTaskDefinitionKey()));
 
@@ -186,12 +204,10 @@ public class ActivitiHistoryController {
             reMap.put("waitingToDo", waitingToDo);
             reMap.put("iDo", iDo);
 
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
-                    GlobalConfig.ResponseCode.SUCCESS.getDesc(), reMap);
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(), GlobalConfig.ResponseCode.SUCCESS.getDesc(), reMap);
 
         } catch (Exception e) {
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
-                    "渲染历史流程失败", e.toString());
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(), "渲染历史流程失败", e.toString());
         }
     }
 

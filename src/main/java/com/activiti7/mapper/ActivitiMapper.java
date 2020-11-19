@@ -36,7 +36,7 @@ public interface ActivitiMapper {
     List<HashMap<String, Object>> selectUser();
 
     //测试
-    @Select("select NAME_,TASK_DEF_KEY_ from act_ru_task")
+    @Select("select NAME_,TASK_DEF_KEY_ from ACT_RU_EXECUTION")
     List<Act_ru_task> selectName();
 
     //流程定义数
@@ -46,7 +46,7 @@ public interface ActivitiMapper {
     //SELECT COUNT(DISTINCT PROC_INST_ID_) from act_ru_execution
 
     //查询流程定义产生的流程实例数
-/*    SELECT p.NAME_,COUNT(DISTINCT e.PROC_INST_ID_) as PiNUM from act_ru_execution AS e
+/*    SELECT p.NAME_,COUNT(DISTINCT e.PROC_INST_ID_) as PiNUM from ACT_RU_EXECUTION AS e
     RIGHT JOIN ACT_RE_PROCDEF AS p on e.PROC_DEF_ID_ = p.ID_
     WHERE p.NAME_ IS NOT NULL GROUP BY p.NAME_*/
 

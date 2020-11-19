@@ -45,7 +45,7 @@ public class ProcessInstanceController {
 
 
     /**
-     * 获取流程实例
+     * 获取流程实例列表
      *
      * @param userInfoBean
      * @return
@@ -55,7 +55,7 @@ public class ProcessInstanceController {
 
         Page<ProcessInstance> processInstances = null;
         try {
-            //测试用写死的用户POSTMAN测试用；生产场景已经登录，在processDefinitions中可以获取到当前登录用户的信息
+
             if (GlobalConfig.Test) {
                 securityUtil.logInAs("wukong");
             }
@@ -64,20 +64,18 @@ public class ProcessInstanceController {
             // }
 
             //使用processInstances之前需要登录
-            processInstances=processRuntime.processInstances(Pageable.of(0,  100));
-            log.info("流程实例数量：{} " , processInstances.getTotalItems());
-
-
+            processInstances = processRuntime.processInstances(Pageable.of(0, 100));
+            log.info("流程实例数量：{} ", processInstances.getTotalItems());
             List<ProcessInstance> list = processInstances.getContent();
-            //排序
-            list.sort((y,x)->x.getStartDate().toString().compareTo(y.getStartDate().toString()));
 
+            //排序
+            list.sort((y, x) -> x.getStartDate().toString().compareTo(y.getStartDate().toString()));
 
             /**
              * 生产环境下使用sql一次查询，循环访问数据库效率低
              */
             List<HashMap<String, Object>> listMap = new ArrayList<HashMap<String, Object>>();
-            for(ProcessInstance pi : list){
+            for (ProcessInstance pi : list) {
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put("id", pi.getId());
                 hashMap.put("name", pi.getName());
@@ -96,7 +94,7 @@ public class ProcessInstanceController {
                 listMap.add(hashMap);
             }
 
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(), GlobalConfig.ResponseCode.SUCCESS.getDesc(),listMap);
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(), GlobalConfig.ResponseCode.SUCCESS.getDesc(), listMap);
 
         } catch (Exception e) {
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(), "获取流程实例失败", e.toString());
@@ -120,7 +118,7 @@ public class ProcessInstanceController {
         try {
             if (GlobalConfig.Test) {
                 securityUtil.logInAs("bajie");
-            }else{
+            } else {
                 securityUtil.logInAs(SecurityContextHolder.getContext().getAuthentication().getName());
             }
 
@@ -135,14 +133,18 @@ public class ProcessInstanceController {
                     // .withBusinessKey("自定义BusinessKey")
                     .build());
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
-                    GlobalConfig.ResponseCode.SUCCESS.getDesc(), processInstance.getName()+"；"+processInstance.getId());
+                    GlobalConfig.ResponseCode.SUCCESS.getDesc(), processInstance.getName() + "；" + processInstance.getId());
         } catch (Exception e) {
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
-                    "创建流程实例失败", e.toString());
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(), "创建流程实例失败", e.toString());
         }
     }
 
-    //删除
+    /**
+     * 删除
+     *
+     * @param instanceID
+     * @return
+     */
     @GetMapping(value = "/deleteInstance")
     public AjaxResponse deleteInstance(@RequestParam("instanceID") String instanceID) {
         try {
@@ -157,13 +159,9 @@ public class ProcessInstanceController {
             );
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
                     GlobalConfig.ResponseCode.SUCCESS.getDesc(), processInstance.getName());
+        } catch (Exception e) {
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(), "删除流程实例失败", e.toString());
         }
-     catch(Exception e)
-        {
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
-                    "删除流程实例失败", e.toString());
-        }
-
     }
 
     //挂起冷冻
@@ -182,9 +180,7 @@ public class ProcessInstanceController {
             );
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
                     GlobalConfig.ResponseCode.SUCCESS.getDesc(), processInstance.getName());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
                     "挂起流程实例失败", e.toString());
         }
@@ -206,9 +202,7 @@ public class ProcessInstanceController {
             );
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
                     GlobalConfig.ResponseCode.SUCCESS.getDesc(), processInstance.getName());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
                     "激活流程实例失败", e.toString());
         }
@@ -229,17 +223,11 @@ public class ProcessInstanceController {
 
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
                     GlobalConfig.ResponseCode.SUCCESS.getDesc(), variableInstance);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
                     "获取流程参数失败", e.toString());
         }
     }
 
 
-
-
-
-    
 }

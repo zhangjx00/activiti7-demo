@@ -13,7 +13,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -111,12 +110,10 @@ public class ProcessDefinitionController {
                     .addString("CreateWithBPMNJS.bpmn",stringBPMN)
                     .name(deploymentName)
                     .deploy();
-            //System.out.println(deployment.getName());
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
-                    GlobalConfig.ResponseCode.SUCCESS.getDesc(), deployment.getId());
+            log.info("流程名字：{}", deployment.getName());
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(), GlobalConfig.ResponseCode.SUCCESS.getDesc(), deployment.getId());
         } catch (Exception e) {
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
-                    "string部署流程失败", e.toString());
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(), "string部署流程失败", e.toString());
         }
     }
 
@@ -135,11 +132,9 @@ public class ProcessDefinitionController {
                     .name(deploymentName)
                     .deploy();
             //System.out.println(deployment.getName());
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
-                    GlobalConfig.ResponseCode.SUCCESS.getDesc(), deployment.getId());
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(), GlobalConfig.ResponseCode.SUCCESS.getDesc(), deployment.getId());
         } catch (Exception e) {
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
-                    "BPMN部署流程失败", e.toString());
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(), "BPMN部署流程失败", e.toString());
         }
 
     }
@@ -199,11 +194,9 @@ public class ProcessDefinitionController {
             }
 
 
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
-                    GlobalConfig.ResponseCode.SUCCESS.getDesc(), listMap);
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(), GlobalConfig.ResponseCode.SUCCESS.getDesc(), listMap);
         }catch (Exception e) {
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
-                    "获取流程定义失败", e.toString());
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(), "获取流程定义失败", e.toString());
         }
     }
 
@@ -255,8 +248,7 @@ public class ProcessDefinitionController {
                 listMap.add(hashMap);
             }
 
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
-                    GlobalConfig.ResponseCode.SUCCESS.getDesc(), listMap);
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(), GlobalConfig.ResponseCode.SUCCESS.getDesc(), listMap);
         } catch (Exception e) {
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(), "查询失败", e.toString());
         }
@@ -281,8 +273,8 @@ public class ProcessDefinitionController {
              * deleteDeployment第二个参数如果是true，删除流程实例，记录及历史；如果选择false则会保留历史
              */
             repositoryService.deleteDeployment(depID, true);
-            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(), "删除成功", null);
 
+            return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(), "删除成功", null);
 
         } catch (Exception e) {
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(), "删除失败", e.toString());
@@ -315,8 +307,7 @@ public class ProcessDefinitionController {
         } catch (Exception e) {
             System.out.println(e.toString());
         }
-        return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
-                GlobalConfig.ResponseCode.SUCCESS.getDesc(), fileName);
+        return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(), GlobalConfig.ResponseCode.SUCCESS.getDesc(), fileName);
     }
 
 
