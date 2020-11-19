@@ -24,18 +24,45 @@ public class Part1_Deloyment {
 
     /**
      * 通过bpmn部署流程
-     * 保存到表：
-     * ACT_GE_BYTEARRAY 流程定义二进制表
-     * ACT_RE_DEPLOYMENT    部署信息表
-     * ACT_RE_PROCDEF   流程定义数据表
      */
     @Test
     public void initDeploymentBPMN() {
 
+
+        /**
+         * 以下是数据执行步骤：
+         *
+         * 第一步：
+         * SELECT * FROM ACT_RE_PROCDEF
+         * WHERE KEY_ = 'myProcess_Part1'
+         * AND ( TENANT_ID_ = '' OR TENANT_ID_ IS NULL )
+         * AND VERSION_ = (SELECT max( VERSION_ ) FROM ACT_RE_PROCDEF WHERE KEY_ = 'myProcess_Part1' AND ( TENANT_ID_ = '' OR TENANT_ID_ IS NULL ))
+         *
+         * 第二步：
+         * select J.* from ACT_RU_TIMER_JOB J
+         * inner join ACT_RE_PROCDEF P on J.PROC_DEF_ID_ = P.ID_
+         * where J.HANDLER_TYPE_ = ? and P.KEY_ = ? and (P.TENANT_ID_ = '' or P.TENANT_ID_ is null)
+         *
+         * 第三步：
+         * select * from ACT_PROCDEF_INFO where PROC_DEF_ID_ = ?
+         *
+         * 第四步：
+         * insert into ACT_RE_PROCDEF(ID_, REV_, CATEGORY_, NAME_, KEY_, VERSION_, DEPLOYMENT_ID_, RESOURCE_NAME_, DGRM_RESOURCE_NAME_, DESCRIPTION_, HAS_START_FORM_KEY_, HAS_GRAPHICAL_NOTATION_ , SUSPENSION_STATE_, TENANT_ID_, ENGINE_VERSION_)
+         * values (?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+         *
+         * 第五步：
+         * insert into ACT_RE_DEPLOYMENT(ID_, NAME_, CATEGORY_, KEY_, TENANT_ID_, DEPLOY_TIME_, ENGINE_VERSION_, VERSION_, PROJECT_RELEASE_VERSION_)
+         * values(?, ?, ?, ?, ?, ?, ?, ?, ?)
+         *
+         * 第六步：
+         * insert into ACT_GE_BYTEARRAY(ID_, REV_, NAME_, BYTES_, DEPLOYMENT_ID_, GENERATED_) values (?, 1, ?, ?, ?, ?)
+         *
+         */
         String filename = "BPMN/Part1_Deployment.bpmn";
         Deployment deployment = repositoryService.createDeployment()
                 .addClasspathResource(filename)
                 .name("流程部署测试候选人task")
+                .key("part1-3")
                 .deploy();
         System.out.println(deployment.getName());
     }
@@ -76,10 +103,14 @@ public class Part1_Deloyment {
 
 
     /**
-     * 查询流程部署
+     * 获取流程列表
      */
     @Test
     public void getDeployments() {
+
+        /**
+         * select distinct RES.* from ACT_RE_DEPLOYMENT RES order by RES.ID_ asc LIMIT ? OFFSET ?
+         */
         List<Deployment> list = repositoryService.createDeploymentQuery().list();
         for(Deployment dep : list){
             System.out.println("Id："+dep.getId());
