@@ -58,11 +58,12 @@ public class Part1_Deloyment {
          * insert into ACT_GE_BYTEARRAY(ID_, REV_, NAME_, BYTES_, DEPLOYMENT_ID_, GENERATED_) values (?, 1, ?, ?, ?, ?)
          *
          */
-        String filename = "BPMN/Part1_Deployment.bpmn";
+        // String filename = "BPMN/Part1_Deployment.bpmn";
+        String filename = "BPMN/Part9_Commont.bpmn";
         Deployment deployment = repositoryService.createDeployment()
                 .addClasspathResource(filename)
-                .name("流程部署测试候选人task")
-                .key("part1-3")
+                .name("commentTest")
+                .key("commentTest-1")
                 .deploy();
         System.out.println(deployment.getName());
     }

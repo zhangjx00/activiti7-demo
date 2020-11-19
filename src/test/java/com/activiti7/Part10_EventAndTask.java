@@ -24,6 +24,9 @@ public class Part10_EventAndTask {
         runtimeService.signalEventReceived("Signal_0igedde");
     }
 
+    /**
+     * 消息撤回
+     */
     @Test
     public void msgBack() {
         Execution exec = runtimeService.createExecutionQuery()
@@ -31,9 +34,12 @@ public class Part10_EventAndTask {
                 .processInstanceId("618bdd31-ef41-11ea-854b-dcfb4875e032")
                 .singleResult();
         runtimeService.messageEventReceived("Message_2qvor1p",exec.getId());
-
+        
+        //启动流程会出错
+        //第一种写法
        // runtimeService.startProcessInstanceByMessage("Message_2qvor1p");
 
+        //新语法
 //        ProcessInstance pi = processRuntime.start(StartMessagePayloadBuilder
 //                        .start("Message_2qvor1p")
 //                .build()

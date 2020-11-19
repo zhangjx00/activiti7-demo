@@ -1,8 +1,10 @@
 package com.activiti7.listener;
 
+import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 
+@Slf4j
 public class ServiceTaskListener2 implements JavaDelegate {
 
     @Override

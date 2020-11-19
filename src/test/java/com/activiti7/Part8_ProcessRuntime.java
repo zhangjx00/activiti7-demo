@@ -13,6 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+/**
+ * activiti7 新特性 ProcessRuntime
+ *
+ *
+ */
 @SpringBootTest
 public class Part8_ProcessRuntime {
 
@@ -107,5 +112,6 @@ public class Part8_ProcessRuntime {
             System.out.println("getTaskId：" + vi.getTaskId());
             System.out.println("getProcessInstanceId：" + vi.getProcessInstanceId());
         }
+
     }
 }

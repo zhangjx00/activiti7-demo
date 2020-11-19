@@ -13,6 +13,9 @@ import java.util.List;
 @Slf4j
 public class Part3_ProcessInstance {
 
+    private static final String PROCESS_DEFINITION_KEY =  "Process_1";
+    private static final String BUSINESS_KEY =  "bKey002";
+
     @Autowired
     private RuntimeService runtimeService;
 
@@ -52,7 +55,7 @@ public class Part3_ProcessInstance {
          * insert into ACT_RU_IDENTITYLINK (ID_, REV_, TYPE_, USER_ID_, GROUP_ID_, TASK_ID_, PROC_INST_ID_, PROC_DEF_ID_) values (?, 1, ?, ?, ?, ?, ?, ?)
          *
          */
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("myProcess_Part1","bKey002");
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY, BUSINESS_KEY);
 
         /**
          * 插入数据：

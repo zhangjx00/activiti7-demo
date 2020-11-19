@@ -12,6 +12,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+/**
+ * activiti7 新特性 TaskRuntime
+ *
+ *
+ */
 @SpringBootTest
 public class Part9_TaskRuntime {
     @Autowired
@@ -61,5 +66,7 @@ public class Part9_TaskRuntime {
         .withTaskId(task.getId())
         .build());
         System.out.println("任务执行完成");
+
+
     }
 }

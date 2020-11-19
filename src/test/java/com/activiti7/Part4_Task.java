@@ -11,6 +11,10 @@ import java.util.List;
 @SpringBootTest
 public class Part4_Task {
 
+    private static final String TASK_ID = "";
+    private static final String PROCESS_INSTANCE_ID = "";
+    private static final String USER_ID = "bajje";
+
     @Autowired
     private TaskService taskService;
 
@@ -41,7 +45,7 @@ public class Part4_Task {
          * select distinct RES.* from ACT_RU_TASK RES WHERE RES.ASSIGNEE_ = 'bajie' order by RES.ID_ asc LIMIT 2147483647 OFFSET 0
          */
         List<Task> list = taskService.createTaskQuery()
-                .taskAssignee("bajie")
+                .taskAssignee(USER_ID)
                 .list();
         for(Task tk : list){
             System.out.println("Id："+tk.getId());
@@ -85,7 +89,8 @@ public class Part4_Task {
          * delete from ACT_RU_EXECUTION where ID_ = '86039de2-2a0c-11eb-b436-a6ee3527a6d6' and REV_ = 8
          */
 
-        taskService.complete("86080ab6-2a0c-11eb-b436-a6ee3527a6d6");
+        taskService.complete(TASK_ID);
+        taskService.addComment(TASK_ID, PROCESS_INSTANCE_ID, "comment2020");
         System.out.println("完成任务");
 
     }
@@ -96,7 +101,7 @@ public class Part4_Task {
     @Test
     public void claimTask(){
         Task task = taskService.createTaskQuery().taskId("1f2a8edf-cefa-11ea-84aa-dcfb4875e032").singleResult();
-        taskService.claim("1f2a8edf-cefa-11ea-84aa-dcfb4875e032","bajie");
+        taskService.claim("1f2a8edf-cefa-11ea-84aa-dcfb4875e032",USER_ID);
     }
 
     /**
@@ -106,7 +111,7 @@ public class Part4_Task {
     public void setTaskAssignee(){
         Task task = taskService.createTaskQuery().taskId("1f2a8edf-cefa-11ea-84aa-dcfb4875e032").singleResult();
         taskService.setAssignee("1f2a8edf-cefa-11ea-84aa-dcfb4875e032","null");//归还候选任务
-        taskService.setAssignee("1f2a8edf-cefa-11ea-84aa-dcfb4875e032","wukong");//交办
+        taskService.setAssignee("1f2a8edf-cefa-11ea-84aa-dcfb4875e032",USER_ID);//交办
     }
 
 
