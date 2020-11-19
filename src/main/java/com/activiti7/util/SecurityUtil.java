@@ -1,4 +1,4 @@
-package com.activiti7;
+package com.activiti7.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

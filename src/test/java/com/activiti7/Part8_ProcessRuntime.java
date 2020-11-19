@@ -1,5 +1,6 @@
 package com.activiti7;
 
+import com.activiti7.util.SecurityUtil;
 import org.activiti.api.model.shared.model.VariableInstance;
 import org.activiti.api.process.model.ProcessInstance;
 import org.activiti.api.process.model.builders.ProcessPayloadBuilder;

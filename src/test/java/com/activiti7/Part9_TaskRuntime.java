@@ -1,5 +1,6 @@
 package com.activiti7;
 
+import com.activiti7.util.SecurityUtil;
 import org.activiti.api.runtime.shared.query.Page;
 import org.activiti.api.runtime.shared.query.Pageable;
 import org.activiti.api.task.model.Task;
